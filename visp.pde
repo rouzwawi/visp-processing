@@ -25,4 +25,7 @@ void draw() {
 }
 
 void mouseMoved() {
+  noFill();
+  stroke(150, 180, 255);
+  hoverQuad = quad.find(mouseX, mouseY);
 }

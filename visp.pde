@@ -1,26 +1,28 @@
 import java.util.List;
 
-
 Quad quad;
 Quad hoverQuad;
 
 void setup() {
-  size(1600, 1600);
+  size(800, 800);
+  colorMode(HSB, 255);
   quad = new Quad();
-  quad.initAll(6);
+  quad.initAll(7);
 }
 
 void draw() {
   background(0);
-  stroke(255, 50);
+
+  stroke(0, 0, 50);
   quad.drawGrid();
-  fill(0, 200, 130);
+
+  noFill();
+  stroke(150, 180, 255);
+  hoverQuad = quad.find(mouseX, mouseY);
+
+  fill(0, 0, 200);
   if (hoverQuad != null) hoverQuad.drawBox();
 }
 
 void mouseMoved() {
-//  fill(0, 180, 255, 15);
-  noFill();
-  stroke(0, 130, 200);
-  hoverQuad = quad.find(mouseX, mouseY);
 }

@@ -2,18 +2,18 @@ import java.util.List;
 
 class Quad {
   volatile boolean inited = false;
-  
+
   final Quad[] qs = new Quad[4];
   final List<Object> elements = new ArrayList<Object>();
-  
-  final float xmin, xmax, ymin, ymax;
-  final float xmid, ymid;
-  
+
+  final int xmin, xmax, ymin, ymax;
+  final int xmid, ymid;
+
   Quad() {
     this(0, width, 0, height);
   }
- 
-  Quad(float xmin, float xmax, float ymin, float ymax) {
+
+  Quad(int xmin, int xmax, int ymin, int ymax) {
     this.xmin = xmin;
     this.xmax = xmax;
     this.ymin = ymin;
@@ -21,11 +21,11 @@ class Quad {
     this.xmid = (xmax-xmin)/2;
     this.ymid = (ymax-ymin)/2;
   }
-  
+
   void initAll() {
     initAll(1);
   }
-  
+
   void initAll(int recurse) {
     if (recurse == 0) return;
     for (int i = 0; i < 4; i++) {
@@ -34,7 +34,7 @@ class Quad {
     }
     inited = true;
   }
-  
+
   void init(int q) {
     assert(q >= 0 && q < 4);
     switch (q) {
@@ -52,20 +52,23 @@ class Quad {
         break;
     }
   }
-  
-  Quad find(float x, float y) {
+
+  Quad find(int x, int y) {
     int q = quadrant(x, y);
     rect(xmin, ymin, xmid*2, ymid*2);
     return qs[q] != null ? qs[q].find(x, y) : this;
   }
-  
-  int quadrant(float x, float y) {
-    if      (x <  xmin+xmid && y <  ymin+ymid) return 0;
-    else if (x >= xmin+xmid && y <  ymin+ymid) return 1;
-    else if (x <  xmin+xmid && y >= ymin+ymid) return 2;
-    else                                       return 3;
+
+  int quadrant(int x, int y) {
+    boolean xless = x < xmin+xmid,
+            yless = y < ymin+ymid;
+
+    if      ( xless &&  yless) return 0;
+    else if (!xless &&  yless) return 1;
+    else if ( xless && !yless) return 2;
+    else                       return 3;
   }
-  
+
   void drawGrid() {
     for (Quad q : qs) {
       if (q != null) q.drawGrid();
@@ -75,7 +78,7 @@ class Quad {
       line(xmin, ymin+ymid, xmax, ymin+ymid);
     }
   }
-  
+
   void drawBox() {
     for (Quad q : qs) {
       if (q != null) q.drawBox();
